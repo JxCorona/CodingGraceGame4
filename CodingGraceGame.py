@@ -654,6 +654,66 @@ def white_room(player_info_arg):
             print(f"   Gently redirect your focus.  "
                   f"The next step is '{expected_cmd}'.")
 
+def spider_man_room(player_info_arg):
+    """Violet Room: a mysterious, weird challenge awaits."""
+
+    room_name = "Violet Room"
+
+    print("\n-- YOU'VE ENTERED THE VIOLET ROOM")
+
+    # LOCATION
+    player_info_arg["location"] = room_name
+
+    # INVENTORY ITEM
+    special_item = "Hero Registration Form"
+    if special_item not in player_info_arg["inventory"]:
+        player_info_arg["inventory"].append(special_item)
+
+    # CHOICE HISTORY
+    player_info_arg["choices"].append(room_name)
+
+    # DISPLAY PLAYER STATE 
+    show_player_info(player_info_arg)
+
+    print("\nYou step cautiously into a dimly lit chamber.")
+    print("The room glows faintly with strange violet light.")
+    print("Blacklights hum softly from the ceiling.")
+
+    print("A masked figure drops from the ceiling.")
+
+    print("\nSpider-Man swings down out of NOWHERE and he is holding a red pen.")
+    print("\n-You pause, yeah you are so confused.-")
+    print("Spider-Man: 'Nobody passes until this paperwork is correct! How MANY times do i have to say this??'")
+
+    answer = input("Who is the hero guarding this room? > ").strip().lower()
+
+    if answer == "spider-man":
+        print("\nSpider-Man: 'Exactly! Respect the hyphen!'")
+        print("He tosses you a chocolate bar from his pocket 🍫 ")
+	player_info_arg["inventory"].append("Chocolate Bar")
+        return player_info_arg
+
+    elif answer == "spiderman":
+        print("\nSpider-Man: 'WRONG! It's not one word like Goldman or Silverman!'")
+        print("WEB-THWIP! Spider-Man slaps you across the face.")
+
+        damage = 10
+        player_info_arg["health"] -= damage
+        player_info_arg["health"] = max(0, min(200, player_info_arg["health"]))
+
+        print(f"You took {damage} damage! Current HP: {player_info_arg['health']}")
+        return "flee"
+
+    else:
+        print("\nSpider-Man: 'I don't even know who that is!'")
+        print("WEB-THWIP! Another slap across your face.")
+
+        damage = 10
+        player_info_arg["health"] -= damage
+        player_info_arg["health"] = max(0, min(200, player_info_arg["health"]))
+
+        print(f"You took {damage} damage! Current HP: {player_info_arg['health']}. You might as well FLEE!")
+        return "flee"
 
 
 # ===========================================================================

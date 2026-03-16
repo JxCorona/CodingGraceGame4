@@ -440,6 +440,78 @@ def green_magic_room(player_info_arg):
         print("The magician waves his hand and you are whisked away...\n")
         return "flee"
 #My room (White)
+
+def indigo_trap_room(player_info_arg):
+    """Indigo Trap Room — Answer riddles, avoid traps, and find hidden secrets."""
+ # Add Indigo Trap Room placeholder
+    #print("You enter the Indigo Trap Room...")   
+    # 1. ASCII Art
+    print_indigo_room()
+    
+    # 2. Announce the room
+    print("\nYou have entered the Indigo Trap Room.")
+    
+    # 3. Update player state
+    player_info_arg["location"] = "Indigo Trap Room"
+    
+    damage_or_healing = -1  # Trap reduces health by 1
+    player_info_arg["health"] += damage_or_healing
+    # Keep health between 0 and 200
+    player_info_arg["health"] = max(0, min(player_info_arg["health"], 200))
+    
+    special_item = "Mystic Key"
+    if "inventory" not in player_info_arg:
+        player_info_arg["inventory"] = []
+    if special_item not in player_info_arg["inventory"]:
+        player_info_arg["inventory"].append(special_item)
+        print(f"You found a {special_item}!")
+    
+    if "choices" not in player_info_arg:
+        player_info_arg["choices"] = []
+    player_info_arg["choices"].append("Indigo Trap Room")
+    
+    # 4. Display state
+    show_player_info(player_info_arg)
+    
+    # 5. Room narrative and interaction
+    print("Shadows flicker on the walls. Pressure plates line the floor.")
+    print("Answer questions correctly or risk losing health. Type 'flee' to exit the room.")
+    
+    # Example questions
+    questions = [
+        {"text": "A cowboy rode into town on Friday, stayed for 3 days, and left on Friday. How?", 
+         "choices": ["A) Forgot the days", "B) Friday is the horse's name", "C) Time travel"], 
+         "answer": "B"},
+        {"text": "How many NBA rings does Michael Jordan have?", 
+         "choices": ["A) 2", "B) 4", "C) 6"], 
+         "answer": "C"},
+        {"text": "What kind of pet does Harry Potter own?", 
+         "choices": ["A) Owl", "B) Rat", "C) Frog"], 
+         "answer": "A"}
+    ]
+    
+    for q in questions:
+        print(f"\n🧩 Question: {q['text']}")
+        for choice in q['choices']:
+            print(choice)
+        answer = input("> ").strip().upper()
+        if "FLEE" in answer:
+            return "flee"
+        if answer == q["answer"]:
+            print("\n✅ Correct!")
+        else:
+            print("\n❌ Wrong! You lose 1 health.")
+            player_info_arg["health"] -= 1
+            if player_info_arg["health"] <= 0:
+                you_died("All lives lost in the Indigo Trap Room!")
+    
+    # 6. Hidden secret if all health intact
+    if player_info_arg["health"] >=98:
+        print("\n🎁 Secret ending unlocked! You discovered the hidden treasure chest!")
+    
+    return player_info_arg
+
+
 def print_white_room():
     print()
     print(r"                    *    .  *       .          *    .")
@@ -582,6 +654,66 @@ def white_room(player_info_arg):
             print(f"   Gently redirect your focus.  "
                   f"The next step is '{expected_cmd}'.")
 
+def spider_man_room(player_info_arg):
+    """Violet Room: a mysterious, weird challenge awaits."""
+
+    room_name = "Violet Room"
+
+    print("\n-- YOU'VE ENTERED THE VIOLET ROOM")
+
+    # LOCATION
+    player_info_arg["location"] = room_name
+
+    # INVENTORY ITEM
+    special_item = "Hero Registration Form"
+    if special_item not in player_info_arg["inventory"]:
+        player_info_arg["inventory"].append(special_item)
+
+    # CHOICE HISTORY
+    player_info_arg["choices"].append(room_name)
+
+    # DISPLAY PLAYER STATE 
+    show_player_info(player_info_arg)
+
+    print("\nYou step cautiously into a dimly lit chamber.")
+    print("The room glows faintly with strange violet light.")
+    print("Blacklights hum softly from the ceiling.")
+
+    print("A masked figure drops from the ceiling.")
+
+    print("\nSpider-Man swings down out of NOWHERE and he is holding a red pen.")
+    print("\n-You pause, yeah you are so confused.-")
+    print("Spider-Man: 'Nobody passes until this paperwork is correct! How MANY times do i have to say this??'")
+
+    answer = input("Who is the hero guarding this room? > ").strip().lower()
+
+    if answer == "spider-man":
+        print("\nSpider-Man: 'Exactly! Respect the hyphen!'")
+        print("He tosses you a chocolate bar from his pocket 🍫 ")
+	player_info_arg["inventory"].append("Chocolate Bar")
+        return player_info_arg
+
+    elif answer == "spiderman":
+        print("\nSpider-Man: 'WRONG! It's not one word like Goldman or Silverman!'")
+        print("WEB-THWIP! Spider-Man slaps you across the face.")
+
+        damage = 10
+        player_info_arg["health"] -= damage
+        player_info_arg["health"] = max(0, min(200, player_info_arg["health"]))
+
+        print(f"You took {damage} damage! Current HP: {player_info_arg['health']}")
+        return "flee"
+
+    else:
+        print("\nSpider-Man: 'I don't even know who that is!'")
+        print("WEB-THWIP! Another slap across your face.")
+
+        damage = 10
+        player_info_arg["health"] -= damage
+        player_info_arg["health"] = max(0, min(200, player_info_arg["health"]))
+
+        print(f"You took {damage} damage! Current HP: {player_info_arg['health']}. You might as well FLEE!")
+        return "flee"
 
 
 # ===========================================================================
@@ -622,76 +754,6 @@ def get_player_name(player_info_arg):
         print_smiley_face()
 
     return player_info_arg
-def indigo_trap_room(player_info_arg):
-    """Indigo Trap Room — Answer riddles, avoid traps, and find hidden secrets."""
- # Add Indigo Trap Room placeholder
-def indigo_trap_room(player_info):
-    print("You enter the Indigo Trap Room...")   
-    # 1. ASCII Art
-    print_indigo_room()
-    
-    # 2. Announce the room
-    print("\nYou have entered the Indigo Trap Room.")
-    
-    # 3. Update player state
-    player_info_arg["location"] = "Indigo Trap Room"
-    
-    damage_or_healing = -1  # Trap reduces health by 1
-    player_info_arg["health"] += damage_or_healing
-    # Keep health between 0 and 200
-    player_info_arg["health"] = max(0, min(player_info_arg["health"], 200))
-    
-    item = "Mystic Key"
-    if "inventory" not in player_info_arg:
-        player_info_arg["inventory"] = []
-    if item not in player_info_arg["inventory"]:
-        player_info_arg["inventory"].append(item)
-        print(f"You found a {item}!")
-    
-    if "choices" not in player_info_arg:
-        player_info_arg["choices"] = []
-    player_info_arg["choices"].append("Indigo Trap Room")
-    
-    # 4. Display state
-    show_player_info(player_info_arg)
-    
-    # 5. Room narrative and interaction
-    print("Shadows flicker on the walls. Pressure plates line the floor.")
-    print("Answer questions correctly or risk losing health. Type 'flee' to exit the room.")
-    
-    # Example questions
-    questions = [
-        {"text": "A cowboy rode into town on Friday, stayed for 3 days, and left on Friday. How?", 
-         "choices": ["A) Forgot the days", "B) Friday is the horse's name", "C) Time travel"], 
-         "answer": "B"},
-        {"text": "How many NBA rings does Michael Jordan have?", 
-         "choices": ["A) 2", "B) 4", "C) 6"], 
-         "answer": "C"},
-        {"text": "What kind of pet does Harry Potter own?", 
-         "choices": ["A) Owl", "B) Rat", "C) Frog"], 
-         "answer": "A"}
-    ]
-    
-    for q in questions:
-        print(f"\n🧩 Question: {q['text']}")
-        for choice in q['choices']:
-            print(choice)
-        answer = input("> ").strip().upper()
-        if "FLEE" in answer:
-            return "flee"
-        if answer == q["answer"]:
-            print("\n✅ Correct!")
-        else:
-            print("\n❌ Wrong! You lose 1 health.")
-            player_info_arg["health"] -= 1
-            if player_info_arg["health"] <= 0:
-                you_died("All lives lost in the Indigo Trap Room!")
-    
-    # 6. Hidden secret if all health intact
-    if player_info_arg["health"] == 3:
-        print("\n🎁 Secret ending unlocked! You discovered the hidden treasure chest!")
-    
-    return player_info_arg
 
 def start_new_adventure(player_info_arg):
     """Presents the three-door choice and routes to the selected room.
@@ -714,9 +776,9 @@ def start_new_adventure(player_info_arg):
     while True:
         print_new_dungeon()
         print("You enter a room, and you see a red door to your left "
-              "and blue and green doors to your right.")
+              "and blue and green doors to your right,"" and white, indigo, and violet doors straight ahead.")
         door_picked = input("Do you pick the red door, blue door, "
-                            "or green door? > ")
+                            "or green door? > " " or would you prefer white, indigo or the violet door? > ")
 
         # We compare only the first few characters so that inputs like
         # "red door", "blue", or "green one" all work.
@@ -728,10 +790,15 @@ def start_new_adventure(player_info_arg):
             room_result = blissful_ignorance_of_illusion_room(player_info_arg)
         elif door.startswith("green"):
             room_result = green_magic_room(player_info_arg)
+	elif door.startswith("white"):
+	    room_result = white_room(player_info_arg)
+	elif door.startswith("indigo"):
+	    room_result = indigo_trap_room(player_info_arg)
+	elif door.startswith("violet"):
+	    room_result = spider_man_room(player_info_arg)
 
         else:
-            print("Sorry, it's either 'red', 'blue', or 'green' as the "
-                  "answer. You're the weakest link, goodbye!")
+            print("Sorry, that's NOT what I offered. You're the weakest link, goodbye!")
             # Continue the loop so the player can try again.
             continue
 

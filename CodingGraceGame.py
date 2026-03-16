@@ -622,7 +622,76 @@ def get_player_name(player_info_arg):
         print_smiley_face()
 
     return player_info_arg
-
+def indigo_trap_room(player_info_arg):
+    """Indigo Trap Room — Answer riddles, avoid traps, and find hidden secrets."""
+ # Add Indigo Trap Room placeholder
+def indigo_trap_room(player_info):
+    print("You enter the Indigo Trap Room...")   
+    # 1. ASCII Art
+    print_indigo_room()
+    
+    # 2. Announce the room
+    print("\nYou have entered the Indigo Trap Room.")
+    
+    # 3. Update player state
+    player_info_arg["location"] = "Indigo Trap Room"
+    
+    damage_or_healing = -1  # Trap reduces health by 1
+    player_info_arg["health"] += damage_or_healing
+    # Keep health between 0 and 200
+    player_info_arg["health"] = max(0, min(player_info_arg["health"], 200))
+    
+    item = "Mystic Key"
+    if "inventory" not in player_info_arg:
+        player_info_arg["inventory"] = []
+    if item not in player_info_arg["inventory"]:
+        player_info_arg["inventory"].append(item)
+        print(f"You found a {item}!")
+    
+    if "choices" not in player_info_arg:
+        player_info_arg["choices"] = []
+    player_info_arg["choices"].append("Indigo Trap Room")
+    
+    # 4. Display state
+    show_player_info(player_info_arg)
+    
+    # 5. Room narrative and interaction
+    print("Shadows flicker on the walls. Pressure plates line the floor.")
+    print("Answer questions correctly or risk losing health. Type 'flee' to exit the room.")
+    
+    # Example questions
+    questions = [
+        {"text": "A cowboy rode into town on Friday, stayed for 3 days, and left on Friday. How?", 
+         "choices": ["A) Forgot the days", "B) Friday is the horse's name", "C) Time travel"], 
+         "answer": "B"},
+        {"text": "How many NBA rings does Michael Jordan have?", 
+         "choices": ["A) 2", "B) 4", "C) 6"], 
+         "answer": "C"},
+        {"text": "What kind of pet does Harry Potter own?", 
+         "choices": ["A) Owl", "B) Rat", "C) Frog"], 
+         "answer": "A"}
+    ]
+    
+    for q in questions:
+        print(f"\n🧩 Question: {q['text']}")
+        for choice in q['choices']:
+            print(choice)
+        answer = input("> ").strip().upper()
+        if "FLEE" in answer:
+            return "flee"
+        if answer == q["answer"]:
+            print("\n✅ Correct!")
+        else:
+            print("\n❌ Wrong! You lose 1 health.")
+            player_info_arg["health"] -= 1
+            if player_info_arg["health"] <= 0:
+                you_died("All lives lost in the Indigo Trap Room!")
+    
+    # 6. Hidden secret if all health intact
+    if player_info_arg["health"] == 3:
+        print("\n🎁 Secret ending unlocked! You discovered the hidden treasure chest!")
+    
+    return player_info_arg
 
 def start_new_adventure(player_info_arg):
     """Presents the three-door choice and routes to the selected room.

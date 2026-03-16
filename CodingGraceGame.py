@@ -439,6 +439,149 @@ def green_magic_room(player_info_arg):
         # The player lost — return to the adventure loop.
         print("The magician waves his hand and you are whisked away...\n")
         return "flee"
+#My room (White)
+def print_white_room():
+    print()
+    print(r"                    *    .  *       .          *    .")
+    print(r"               .        *      .         .              *")
+    print(r"          *       .          *       .        *     .      *")
+    print(r"      .       *       .    ~~~~~ ~~~~~ ~~~~~      .     *")
+    print(r"                         |   |       |   |")
+    print(r"              *          |   |  (_)  |   |          *")
+    print(r"                         |   |  /|\  |   |")
+    print(r"         .               |   | / | \ |   |                 .")
+    print(r"                    _____|___|___|___|___|_____")
+    print(r"               *   /  * *   *   * *   *  *    \   *")
+    print(r"          .       /  *  The White Room   *  *   \       .")
+    print(r"    *    .      |   ~  ~  ~  ~  ~  ~  ~  ~  ~   |     *    .")
+    print(r"           *    |  ~  breathe in ... breathe out  ~   |   *")
+    print(r"    .           |   ~  ~  ~  ~  ~  ~  ~  ~  ~   |          .")
+    print(r"                 \________________________________/")
+    print()
+
+
+def white_room(player_info_arg):
+    """The White Room: a sanctuary of meditation and mindful breathwork.
+
+    The player completes breathwork cycles.  Every 3 deep breaths earns
+    1 Serenity Point.  Collecting 3 Serenity Points triggers victory.
+    Leaving early returns 'flee' so the door-selection loop continues.
+
+    Args:
+        player_info_arg: The player state dictionary.
+
+    Returns:
+        player_info_arg if the player completes the room normally,
+        or the string "flee" if they choose to leave early.
+        May raise GameOver (via you_won()) on victory.
+    """
+    ROOM_NAME    = "White Room"
+    HEALING      = 15
+    REWARD_ITEM  = "Lotus Crystal"
+    BREATHS_PER_POINT = 1
+    POINTS_TO_WIN     = 1
+
+    # --- ASCII art & welcome ---
+    print_white_room()
+    print("You step into the White Room.")
+    print("Soft light fills every corner.  The air smells of cedar and rain.")
+    print("A gentle voice whispers: 'Still your mind.  Breathe.'\n")
+
+    # --- State updates (location, healing, inventory, choices) ---
+    player_info_arg["location"] = ROOM_NAME
+
+    healed_to = min(200, player_info_arg["health"] + HEALING)
+    actual_heal = healed_to - player_info_arg["health"]
+    player_info_arg["health"] = healed_to
+
+    if REWARD_ITEM not in player_info_arg["inventory"]:
+        player_info_arg["inventory"].append(REWARD_ITEM)
+        print(f"The room's calm energy restores {actual_heal} health "
+              f"and gifts you the {REWARD_ITEM}.")
+    else:
+        print(f"The room's calm energy restores {actual_heal} health.")
+
+    player_info_arg["choices"].append(ROOM_NAME)
+
+    # --- Display state exactly once, after all updates ---
+    show_player_info(player_info_arg)
+
+    # --- Breathwork instructions ---
+    print("\n  ╔══════════════════════════════════════════════╗")
+    print("  ║         ~ B R E A T H W O R K  ~            ║")
+    print("  ║                                              ║")
+    print("  ║  Commands:                                   ║")
+    print("  ║   'inhale'  — begin a long, slow breath in  ║")
+    print("  ║   'hold'    — hold at the top               ║")
+    print("  ║   'exhale'  — release fully and slowly      ║")
+    print("  ║   'leave'   — return to the dungeon         ║")
+    print("  ║                                              ║")
+    print("  ║  Complete inhale → hold → exhale to finish  ║")
+    print("  ║  one deep breath.  Every 3 breaths = 1 pt.  ║")
+    print("  ║  Reach 3 points to awaken your true self.   ║")
+    print("  ╚══════════════════════════════════════════════╝\n")
+
+    # --- Breathwork loop ---
+    breath_count   = 0   # completed full breath cycles
+    serenity_pts   = 0   # points earned (1 per 3 breaths)
+    breath_stage   = 0   # 0 = waiting for inhale, 1 = waiting for hold,
+                         # 2 = waiting for exhale
+
+    STAGE_PROMPTS = {
+        0: ("inhale",
+            "  🌬  Breathe IN slowly through your nose ...",
+            "  ✓  Beautiful.  Now hold ..."),
+        1: ("hold",
+            "  🌬  HOLD gently at the top ...",
+            "  ✓  Good.  Now release ..."),
+        2: ("exhale",
+            "  🌬  Breathe OUT slowly through your mouth ...",
+            None),   # completion message handled separately
+    }
+
+    while True:
+        expected_cmd, prompt_msg, confirm_msg = STAGE_PROMPTS[breath_stage]
+        print(prompt_msg)
+        action = input(f"  [{expected_cmd} | leave] > ").strip().lower()
+
+        if action == "leave":
+            print("\nYou bow gently to the room and step back toward the dungeon.")
+            print(f"  Breaths completed : {breath_count}")
+            print(f"  Serenity Points   : {serenity_pts}\n")
+            return "flee"
+
+        if action == expected_cmd:
+            if confirm_msg:
+                print(confirm_msg)
+            breath_stage += 1
+
+            # --- Completed one full breath cycle ---
+            if breath_stage == 3:
+                breath_stage  = 0
+                breath_count += 1
+
+                print(f"\n    Breath complete!  "
+                      f"Total breaths: {breath_count}")
+
+                if breath_count % BREATHS_PER_POINT == 0:
+                    serenity_pts += 1
+                    print(f"    3 breaths reached — you earn 1 Serenity Point!")
+                    print(f"  Serenity Points: {serenity_pts} / {POINTS_TO_WIN}\n")
+
+                    if serenity_pts >= POINTS_TO_WIN:
+                        you_won(
+                            "With three Serenity Points your mind dissolves into pure light.\n"
+                            "  The White Room smiles.  You have found peace"
+                        )
+                else:
+                    remaining = BREATHS_PER_POINT - (breath_count % BREATHS_PER_POINT)
+                    print(f"  {remaining} more breath(s) until your next Serenity Point.\n")
+
+        else:
+            # Wrong command for this stage — gentle nudge, no penalty
+            print(f"   Gently redirect your focus.  "
+                  f"The next step is '{expected_cmd}'.")
+
 
 
 # ===========================================================================
@@ -516,6 +659,7 @@ def start_new_adventure(player_info_arg):
             room_result = blissful_ignorance_of_illusion_room(player_info_arg)
         elif door.startswith("green"):
             room_result = green_magic_room(player_info_arg)
+
         else:
             print("Sorry, it's either 'red', 'blue', or 'green' as the "
                   "answer. You're the weakest link, goodbye!")

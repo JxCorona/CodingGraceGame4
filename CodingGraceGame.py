@@ -7,12 +7,13 @@ mini-game, ASCII art, and a player-state dictionary that tracks the
 player's name, health, inventory, and choices throughout the game.
 
 Game structure
---------------
-    - Three rooms: Red (Painful Truth), Blue (Blissful Ignorance),
+-------------- 
+	  - Three rooms: Red (Painful Truth), Blue (Blissful Ignorance),
       Green (Magic / Rock-Paper-Scissors).
     - A guard encounter in the Blue Room that requires the correct
       sequence of actions to escape.
-    - A global player_info dictionary, passed explicitly to every
+    - A global player_info
+ dictionary, passed explicitly to every
       function, that holds the player's state.
 
 Key programming concepts illustrated
@@ -446,7 +447,7 @@ def indigo_trap_room(player_info_arg):
  # Add Indigo Trap Room placeholder
     #print("You enter the Indigo Trap Room...")   
     # 1. ASCII Art
-    print_indigo_room()
+    #print_indigo_room()
     
     # 2. Announce the room
     print("\nYou have entered the Indigo Trap Room.")
@@ -690,12 +691,13 @@ def spider_man_room(player_info_arg):
     if answer == "spider-man":
         print("\nSpider-Man: 'Exactly! Respect the hyphen!'")
         print("He tosses you a chocolate bar from his pocket 🍫 ")
-	player_info_arg["inventory"].append("Chocolate Bar")
+        player_info_arg["inventory"].append("Chocolate Bar")
         return player_info_arg
 
     elif answer == "spiderman":
         print("\nSpider-Man: 'WRONG! It's not one word like Goldman or Silverman!'")
-        print("WEB-THWIP! Spider-Man slaps you across the face.")
+        print_web_thwip()
+        print("Spider-Man slaps you across the face.")
 
         damage = 10
         player_info_arg["health"] -= damage
@@ -706,7 +708,8 @@ def spider_man_room(player_info_arg):
 
     else:
         print("\nSpider-Man: 'I don't even know who that is!'")
-        print("WEB-THWIP! Another slap across your face.")
+        print_web_thwip()
+        print("Spider-Man slaps you across the face.")
 
         damage = 10
         player_info_arg["health"] -= damage
@@ -775,8 +778,8 @@ def start_new_adventure(player_info_arg):
 
     while True:
         print_new_dungeon()
-        print("You enter a room, and you see a red door to your left "
-              "and blue and green doors to your right,"" and white, indigo, and violet doors straight ahead.")
+        print("You enter a room, and you see a red door to your left, blue and green doors to your right,")
+        print("and white, indigo, and violet doors straight ahead.")
         door_picked = input("Do you pick the red door, blue door, "
                             "or green door? > " " or would you prefer white, indigo or the violet door? > ")
 
@@ -790,12 +793,12 @@ def start_new_adventure(player_info_arg):
             room_result = blissful_ignorance_of_illusion_room(player_info_arg)
         elif door.startswith("green"):
             room_result = green_magic_room(player_info_arg)
-	elif door.startswith("white"):
-	    room_result = white_room(player_info_arg)
-	elif door.startswith("indigo"):
-	    room_result = indigo_trap_room(player_info_arg)
-	elif door.startswith("violet"):
-	    room_result = spider_man_room(player_info_arg)
+        elif door.startswith("white"):
+          room_result = white_room(player_info_arg)
+        elif door.startswith("indigo"):
+          room_result = indigo_trap_room(player_info_arg)
+        elif door.startswith("violet"):
+          room_result = spider_man_room(player_info_arg)
 
         else:
             print("Sorry, that's NOT what I offered. You're the weakest link, goodbye!")
@@ -990,6 +993,16 @@ def print_new_dungeon():
     print(r"/   -_- _ -                  _- _---                             -_-  -_-         \ ")
     print()
 
+def print_web_thwip():
+    print()
+    print(r"            \  |  /")
+    print(r"         `  .-'-.-'-.'  `")
+    print(r"        --  /  WEB  \  --")
+    print(r"            | THWIP! |")
+    print(r"        --  \  SMACK /  --")
+    print(r"         .-'.-'-.-'-.'-.")
+    print(r"            /  |  \ ")
+    print()
 
 # ===========================================================================
 # ENTRY POINT

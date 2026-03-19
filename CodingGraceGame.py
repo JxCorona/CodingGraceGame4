@@ -456,13 +456,13 @@ def indigo_trap_room(player_info_arg):
     print_indigo_room()
     print("\nYou have entered the Indigo Trap Room.")
 
+    # Update player state
     player_info_arg["location"] = "Indigo Trap Room"
     player_info_arg["choices"].append("Indigo Trap Room")
-	
-	print("Shadows flicker on the walls. 
 
-    
-	 lives = 2
+    print("Shadows flicker on the walls. Pressure plates line the floor.")
+
+    lives = 2
     print(f"\nYou start with {lives} lives.")
 
     questions = [
@@ -502,6 +502,7 @@ def indigo_trap_room(player_info_arg):
             if lives <= 0:
                 you_died("You have died and are doomed to live in the underworld as a chef")
 
+    print("\n🏆 You escaped the Indigo Trap Room!")
     print("🔥 RANK UP! You are now an S-Tier Adventurer!")
     print("✨ Power surges through your body...")
 
@@ -686,7 +687,7 @@ def spider_man_room(player_info_arg):
     if answer == "spider-man":
         print("\nSpider-Man: 'Exactly! Respect the hyphen!'")
         print("He tosses you a chocolate bar from his pocket 🍫 ")
-		player_info_arg["inventory"].append("Chocolate Bar")
+        player_info_arg["inventory"].append("Chocolate Bar")
         return player_info_arg
 
     elif answer == "spiderman":

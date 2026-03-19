@@ -458,11 +458,11 @@ def indigo_trap_room(player_info_arg):
 
     player_info_arg["location"] = "Indigo Trap Room"
     player_info_arg["choices"].append("Indigo Trap Room")
+	
+	print("Shadows flicker on the walls. 
 
-	print("Shadows flicker on the walls. Pressure plates line the floor.")
-    print("Answer questions correctly or risk losing health. Type 'flee' to exit the room.")
-
-    lives = 2
+    
+	 lives = 2
     print(f"\nYou start with {lives} lives.")
 
     questions = [
@@ -502,11 +502,10 @@ def indigo_trap_room(player_info_arg):
             if lives <= 0:
                 you_died("You have died and are doomed to live in the underworld as a chef")
 
-    print("\n🏆 You escaped the Indigo Trap Room!")
-	print("🔥 RANK UP! You are now an S-Tier Adventurer!")
-	print("✨ Power surges through your body...")
+    print("🔥 RANK UP! You are now an S-Tier Adventurer!")
+    print("✨ Power surges through your body...")
 
-	return "flee"
+    return "flee"
 
 
 def print_white_room():
@@ -687,7 +686,7 @@ def spider_man_room(player_info_arg):
     if answer == "spider-man":
         print("\nSpider-Man: 'Exactly! Respect the hyphen!'")
         print("He tosses you a chocolate bar from his pocket 🍫 ")
-	player_info_arg["inventory"].append("Chocolate Bar")
+		player_info_arg["inventory"].append("Chocolate Bar")
         return player_info_arg
 
     elif answer == "spiderman":
@@ -781,7 +780,7 @@ def start_new_adventure(player_info_arg):
         # "red door", "blue", or "green one" all work.
         door = door_picked.strip().lower()
 
-         if door.startswith("red"):
+        if door.startswith("red"):
             room_result = painful_truth_of_reality_room(player_info_arg)
         elif door.startswith("blue"):
             room_result = blissful_ignorance_of_illusion_room(player_info_arg)
